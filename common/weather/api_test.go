@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetWeather(t *testing.T) {
-	w, err := GetWeather("101280604")
+	w, err := GetWeather("101020600")
 	if err != nil || w.errCode != "" {
 		t.Fatalf("err:%v\nerrCode:%v\nerrDesc:%v\n", err, w.errCode, w.errDesc)
 	}
@@ -15,6 +15,9 @@ func TestGetWeather(t *testing.T) {
 	t.Logf("%v", string(j))
 	t.Logf("%v", w.GetAQIInfo())
 	t.Logf("%v", w.GetCurrentWeatherInfo())
+	t.Logf("%v", w.GetTomorrowWeatherInfo())
+	//t.Logf("%v", w.GetTomorrowWeatherInfoAttachCare())
+	
 }
 
 func TestGetCityLike(t *testing.T) {

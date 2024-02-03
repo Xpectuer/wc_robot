@@ -76,8 +76,15 @@ func getWeatherToMembers(cityCode, toNickNames, ToRemarkNames string) {
 	if err != nil {
 		log.Printf("[ERROR]获取天气信息失败 err:%v", err)
 	}
+	// for _, user := range users {
+	// 	_, err = robot.Storage.Self.SendTextToUser(user, w.GetCurrentWeatherInfo())
+	// 	if err != nil {
+	// 		log.Printf("[ERROR]发送消息给 %s 失败, err:%v", user.NickName, err)
+	// 	}
+	// }
+
 	for _, user := range users {
-		_, err = robot.Storage.Self.SendTextToUser(user, w.GetCurrentWeatherInfo())
+		_, err = robot.Storage.Self.SendTextToUser(user, w.GetTomorrowWeatherInfo())
 		if err != nil {
 			log.Printf("[ERROR]发送消息给 %s 失败, err:%v", user.NickName, err)
 		}
