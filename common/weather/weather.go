@@ -195,14 +195,17 @@ func (w *WeatherResp) GetTomorrowWeatherInfo() string {
 	
 	avg:= convStrAndGetAvgFloat(windSpeedTomorrow.From, windSpeedTomorrow.To)
 	windOp := windOptional(&windDireTomorrow, GetWindLevel(avg))
+
+	weather1 := GetWeatherCodeDesc(weatherTomorrow.From)
+	weather2 := GetWeatherCodeDesc(weatherTomorrow.To)
 	return fmt.Sprintf(
 		"【天气预报】\n"+
-			"明天%s转%s\n"+
+			"明天%s\n"+
 			"%s"+
 			"气温：%s到%s%s\n"+
 			"%s"+
 			"%s",
-		GetWeatherCodeDesc(weatherTomorrow.From), GetWeatherCodeDesc(weatherTomorrow.To),
+		GetWeatherStr(weather1, weather2),
 		rainCare(w),
 		tempTomorrow.To, tempTomorrow.From, tempUnit,
 		tempCare(w),
@@ -364,6 +367,8 @@ func (w *WeatherResp) GetCurrentWeatherInfo() string {
 	next1 := strconv.Itoa(w.ForecastHourly.Weather.Value[0])
 	next2 := strconv.Itoa(w.ForecastHourly.Weather.Value[1])
 	next3 := strconv.Itoa(w.ForecastHourly.Weather.Value[2])
+	weather1  := GetWeatherCodeDesc(w.ForecastDaily.Weather.Value[0].From)
+	weather2 := GetWeatherCodeDesc(w.ForecastDaily.Weather.Value[0].To)
 	return fmt.Sprintf(
 		"【天气预报】\n"+
 			"当前天气: %s\n"+
@@ -372,7 +377,8 @@ func (w *WeatherResp) GetCurrentWeatherInfo() string {
 			"当前空气质量: %s\n"+
 			"预期未来三小时天气: %s, %s, %s\n"+
 			"今日气温: %s到%s\n"+
-			"今日天气预期: %s转%s\n",
+			"今日天气预期: %s\n",
+			
 		//"本次数据更新时间: %s",
 		GetWeatherCodeDesc(w.Current.Weather),
 		w.Current.Temperature.Value, w.Current.Temperature.Unit,
@@ -380,9 +386,18 @@ func (w *WeatherResp) GetCurrentWeatherInfo() string {
 		w.AQI.Aqi,
 		GetWeatherCodeDesc(next1), GetWeatherCodeDesc(next2), GetWeatherCodeDesc(next3),
 		w.ForecastDaily.Temperature.Value[0].To, w.ForecastDaily.Temperature.Value[0].From,
-		GetWeatherCodeDesc(w.ForecastDaily.Weather.Value[0].From), GetWeatherCodeDesc(w.ForecastDaily.Weather.Value[0].To),
+		GetWeatherStr(weather1, weather2),
 		//strings.Join(strings.Split(strings.TrimSuffix(w.Current.PubTime, "+08:00"), "T"), " "),
+
 	)
+}
+
+func GetWeatherStr(weather1, weather2 string) string {
+	if weather1 == weather2 {
+		return weather1
+	} else {
+		return weather1+"转"+ weather2 
+	}
 }
 
 // 获取天气信息中的AQI空气质量信息
